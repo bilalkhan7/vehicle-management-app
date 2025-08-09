@@ -1,0 +1,20 @@
+<header class="app-header">
+  <mat-toolbar color="primary">
+    <div class="toolbar-inner">
+      <div class="brand">
+        <mat-icon aria-hidden="true">directions_car</mat-icon>
+        <span class="title">Vehicle Management App</span>
+      </div>
+    </div>
+  </mat-toolbar>
+</header>
+
+<main id="content" class="container">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="app-footer">
+  <div class="container footer-inner">
+    <span class="muted">© {{ currentYear }} Vehicle Management</span>
+  </div>
+</footer>
