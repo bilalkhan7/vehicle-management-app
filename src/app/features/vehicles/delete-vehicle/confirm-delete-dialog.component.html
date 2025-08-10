@@ -1,0 +1,27 @@
+<h2 mat-dialog-title class="title" aria-live="polite">
+  <mat-icon color="warn" aria-hidden="true">delete</mat-icon>
+  <span>{{ data.title || 'Delete vehicle' }}</span>
+</h2>
+
+<mat-dialog-content class="content">
+  <p class="message">
+    {{ data.message || 'Are you sure you want to delete this vehicle?' }}
+  </p>
+
+  @if (vehicleLabel) {
+    <p class="label">
+      <strong> {{ vehicleLabel }} </strong>
+    </p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="actions">
+  <button mat-button (click)="close(false)">
+    {{ data.cancelLabel || 'Cancel' }}
+  </button>
+
+  <button mat-flat-button color="warn" (click)="close(true)">
+    <mat-icon>delete</mat-icon>
+    <span>{{ data.confirmLabel || 'Delete' }}</span>
+  </button>
+</mat-dialog-actions>

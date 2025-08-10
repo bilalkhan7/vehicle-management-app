@@ -1,0 +1,185 @@
+<section class="container">
+  <header class="header">
+    <div class="title-wrap">
+      <h1>Vehicles</h1>
+      @if (!isLoading()) {
+        <span class="count">{{ vehicles().length }}</span>
+      }
+    </div>
+
+    <div class="actions">
+      <button
+        mat-stroked-button
+        (click)="loadVehicles()"
+        [disabled]="isLoading()"
+        aria-label="Refresh"
+      >
+        <mat-icon>refresh</mat-icon> Refresh
+      </button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="openAddVehicleModal()"
+        aria-label="Add Vehicle"
+      >
+        <mat-icon>add</mat-icon> Add Vehicle
+      </button>
+    </div>
+  </header>
+
+  @if (!isLoading()) {
+    <div class="filters">
+      <mat-form-field appearance="outline" class="q">
+        <mat-label>Search</mat-label>
+        <input
+          matInput
+          type="search"
+          placeholder="Name, make/model or VIN"
+          (input)="onSearch($any($event.target).value)"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          aria-label="Clear"
+          (click)="onSearch('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="fuel">
+        <mat-label>Fuel</mat-label>
+        <mat-select
+          [value]="selectedFuel()"
+          (valueChange)="onFuelChange($event)"
+        >
+          <mat-option value="All">All</mat-option>
+          @for (f of fuelOptions; track f) {
+            <mat-option [value]="f">{{ f }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="sort">
+        <mat-label>Sort</mat-label>
+        <mat-select
+          [value]="selectedSort()"
+          (valueChange)="onSortChange($event)"
+        >
+          <mat-option [value]="SORT_BY.NAME_ASC">Name ↑</mat-option>
+          <mat-option [value]="SORT_BY.NAME_DESC">Name ↓</mat-option>
+          <mat-option [value]="SORT_BY.MANUFACTURER_ASC">Manufacturer ↑</mat-option>
+          <mat-option [value]="SORT_BY.MANUFACTURER_DESC">Manufacturer ↓</mat-option>
+          <mat-option [value]="SORT_BY.MILEAGE_ASC">Mileage ↑</mat-option>
+          <mat-option [value]="SORT_BY.MILEAGE_DESC">Mileage ↓</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  }
+
+  @if (isLoading()) {
+    <div class="state">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  }
+
+  @if (!isLoading() && filteredAndSortedVehicles().length === 0) {
+    <div class="state">
+      <mat-icon>directions_car</mat-icon>
+      <p>No vehicles match your filters.</p>
+    </div>
+  }
+
+  @if (!isLoading() && filteredAndSortedVehicles().length) {
+    <div class="grid">
+      @for (v of paginatedVehicles(); track v.id) {
+        <mat-card
+          class="veh-card"
+          [attr.data-id]="v.id"
+          [class.added]="isHighlighted(v.id!)"
+          tabindex="0"
+          role="button"
+          (click)="openDetails(v)"
+          (keydown.enter)="openDetails(v)"
+          (keydown.space)="$event.preventDefault(); openDetails(v)"
+          [attr.aria-label]="'View details for ' + (v.name || (v.manufacturer + ' ' + v.model))"
+        >
+          <mat-card-header>
+            <div mat-card-avatar class="avatar">
+              <mat-icon>directions_car</mat-icon>
+            </div>
+
+            <mat-card-title
+              class="title"
+              [attr.title]="v.name || (v.manufacturer + ' ' + v.model)"
+            >
+              {{ v.name || (v.manufacturer + ' ' + v.model) }}
+            </mat-card-title>
+
+            <mat-card-subtitle class="subtitle">
+              {{ v.manufacturer }} • {{ v.model }}
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="badges">
+              @if (v.mileage !== null && v.mileage !== undefined) {
+                <span class="badge">
+                  <mat-icon>route</mat-icon>{{ v.mileage | number }} km
+                </span>
+              }
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions class="card-actions" (click)="$event.stopPropagation()">
+            <a
+              mat-stroked-button
+              color="primary"
+              [routerLink]="['/vehicle', v.id]"
+              class="view-btn"
+              aria-label="View details"
+            >
+              <mat-icon>open_in_new</mat-icon>
+              <span>View details</span>
+            </a>
+
+            <span class="action-spacer"></span>
+
+            <button
+              mat-icon-button
+              class="edit-btn"
+              matTooltip="Edit"
+              aria-label="Edit vehicle"
+              (click)="openEdit(v)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <button
+              mat-icon-button
+              color="warn"
+              class="delete-btn"
+              matTooltip="Delete"
+              aria-label="Delete vehicle"
+              (click)="delete(v.id!)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+
+    <mat-paginator
+      [length]="filteredAndSortedVehicles().length"
+      [pageIndex]="currentPageIndex()"
+      [pageSize]="currentPageSize()"
+      [pageSizeOptions]="[3, 6, 12, 24]"
+      showFirstLastButtons
+      (page)="onPage($event)"
+      aria-label="Vehicles pagination"
+    >
+    </mat-paginator>
+  }
+</section>

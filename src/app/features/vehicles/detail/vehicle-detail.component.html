@@ -1,0 +1,110 @@
+<mat-card class="vehicle-detail-card">
+  @if (loading()) {
+    <div class="loading-state" role="status" aria-live="polite">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Loading vehicle details…</p>
+    </div>
+  } @else {
+    @if (error()) {
+      <div class="error-state">
+        <mat-icon>error</mat-icon>
+        <p>Couldn’t load vehicle details.</p>
+        <button mat-stroked-button (click)="reload()">
+          <mat-icon>refresh</mat-icon><span>Retry</span>
+        </button>
+        <button mat-button (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon><span>Back</span>
+        </button>
+      </div>
+    } @else {
+      @if (vehicle(); as v) {
+        <mat-card-header>
+          <div mat-card-avatar class="avatar">
+            <mat-icon>directions_car</mat-icon>
+          </div>
+
+          <mat-card-title class="title" [attr.title]="v.name || (v.manufacturer + ' ' + v.model)">
+            {{ v.name || (v.manufacturer + ' ' + v.model) }}
+          </mat-card-title>
+
+          <mat-card-subtitle class="subtitle">
+            {{ v.manufacturer }} • {{ v.model }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="details-grid">
+            @if (v.fuel) {
+              <div class="detail-item">
+                <mat-icon>local_gas_station</mat-icon>
+                <span class="label">Fuel:</span>
+                <span class="value">{{ v.fuel }}</span>
+              </div>
+            }
+            @if (v.type) {
+              <div class="detail-item">
+                <mat-icon>category</mat-icon>
+                <span class="label">Type:</span>
+                <span class="value">{{ v.type }}</span>
+              </div>
+            }
+            @if (v.mileage !== null && v.mileage !== undefined) {
+              <div class="detail-item">
+                <mat-icon>route</mat-icon>
+                <span class="label">Mileage:</span>
+                <span class="value">{{ v.mileage | number }} km</span>
+              </div>
+            }
+            @if (v.color) {
+              <div class="detail-item">
+                <mat-icon>palette</mat-icon>
+                <span class="label">Color:</span>
+                <span class="value">{{ v.color }}</span>
+              </div>
+            }
+            @if (v.vin) {
+              <div class="detail-item">
+                <mat-icon>confirmation_number</mat-icon>
+                <span class="label">VIN:</span>
+                <span class="value code">{{ v.vin }}</span>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions class="detail-actions">
+          <div class="detail-actions-left">
+            <button
+              mat-stroked-button
+              color="primary"
+              (click)="goBack()
+              "
+              class="back-btn"
+              aria-label="Back to vehicles list"
+            >
+              <mat-icon>arrow_back</mat-icon><span>Back to list</span>
+            </button>
+          </div>
+
+          <div class="detail-actions-right">
+            <button mat-flat-button color="primary" (click)="openEdit()" aria-label="Edit vehicle">
+              <mat-icon>edit</mat-icon><span>Edit</span>
+            </button>
+
+            <button mat-flat-button color="warn" (click)="deleteVehicle()" aria-label="Delete vehicle">
+              <mat-icon>delete</mat-icon><span>Delete</span>
+            </button>
+          </div>
+        </mat-card-actions>
+      } @else {
+        <div class="empty-state">
+          <mat-icon>directions_car</mat-icon>
+          <p>Vehicle not found.</p>
+          <button mat-button (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon><span>Back</span>
+          </button>
+        </div>
+      }
+    }
+  }
+</mat-card>
