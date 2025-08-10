@@ -1,0 +1,28 @@
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+}
+
+.content {
+  color: var(--mat-sys-on-surface);
+
+  .message {
+    margin: 0 0 6px;
+  }
+
+  .warning {
+    margin: 0 0 8px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .label {
+    margin: 0;
+    opacity: .9;
+  }
+}
+
+.actions {
+  padding-top: 8px;
+}
