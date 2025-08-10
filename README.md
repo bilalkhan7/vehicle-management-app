@@ -72,19 +72,24 @@ vehicle-management-app/
    ```bash
    git clone https://github.com/bilalkhan7/vehicle-management-app.git
    cd vehicle-management-app
+   ```
 
 2. **Install dependencies**
-```bash
-npm install
+   ```bash
+   npm install
+   ```
 
 3. **Run Locally**
-```bash
-npm start
+   ```bash
+   npm start
+   ```
 
 4. **Build for production**
-```bash
-npm run build
+   ```bash
+   npm run build
+   ```
 
 ---
+
 ## License
 This project is licensed under the MIT License.
