@@ -10,7 +10,7 @@ import { finalize, take } from 'rxjs/operators';
 
 import { VehicleService } from '../../../core/services/vehicle.service';
 import { Vehicle, Fuel, CreateVehicle, FUEL_TYPES } from '../../../core/models/vehicle.model';
-import { requiredTrimmed } from '../../../shared/validators/required.validtor';
+import { requiredTrimmed } from '../../../shared/validators/required.validator';
 
 @Component({
   selector: 'app-add-vehicle',

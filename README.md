@@ -62,6 +62,7 @@ vehicle-management-app/
 ├── angular.json
 ├── package.json
 └── README.md
+```
 
 ---
 
